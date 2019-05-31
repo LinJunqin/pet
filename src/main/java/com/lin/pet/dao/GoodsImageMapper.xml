@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.GoodsImageMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.GoodsImage">
+    <constructor>
+      <idArg column="goods_image_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="goods_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    goods_image_id, goods_id, url, create_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods_image
+    where goods_image_id = #{goodsImageId,jdbcType=BIGINT}
+  </select>
+    <select id="selectUrlsByGoodsId" resultType="java.lang.String">
+      select url
+      from goods_image
+      where goods_id = #{goodsId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from goods_image
+    where goods_image_id = #{goodsImageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.GoodsImage">
+    insert into goods_image (goods_image_id, goods_id, url, 
+      create_time, modified_time)
+    values (#{goodsImageId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.GoodsImage">
+    insert into goods_image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsImageId != null">
+        goods_image_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsImageId != null">
+        #{goodsImageId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into goods_image (goods_image_id, goods_id, url, 
+      create_time, modified_time)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.goodsImageId,jdbcType=BIGINT}, #{item.goodsId,jdbcType=BIGINT}, #{item.url,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into goods_image
+    (goods_image_id, goods_id, url, create_time, modified_time)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.goodsImageId != null">
+          #{item.goodsImageId,jdbcType=BIGINT},
+        </if>
+        <if test="item.goodsImageId == null">
+          NULL,
+        </if>
+        <if test="item.goodsId != null">
+          #{item.goodsId,jdbcType=BIGINT},
+        </if>
+        <if test="item.goodsId == null">
+          NULL,
+        </if>
+        <if test="item.url != null">
+          #{item.url,jdbcType=VARCHAR},
+        </if>
+        <if test="item.url == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.GoodsImage">
+    update goods_image
+    <set>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where goods_image_id = #{goodsImageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.GoodsImage">
+    update goods_image
+    set goods_id = #{goodsId,jdbcType=BIGINT},
+      url = #{url,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where goods_image_id = #{goodsImageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update goods_image
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="goodsId =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsImageId} then #{item.goodsId}
+        </foreach>
+      </trim>
+      <trim prefix="url =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsImageId} then #{item.url}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsImageId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsImageId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+    </trim>
+    where goods_image_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.goodsImageId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update goods_image
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="goodsId =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.goodsId != null ">
+            when  #{item.goodsImageId} then #{item.goodsId}
+          </if>
+          <if test="item.goodsId == null ">
+            when  #{item.goodsImageId} then goods_image.goods_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="url =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.url != null ">
+            when  #{item.goodsImageId} then #{item.url}
+          </if>
+          <if test="item.url == null ">
+            when  #{item.goodsImageId} then goods_image.url
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.goodsImageId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.goodsImageId} then goods_image.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case goodsImageId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.goodsImageId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.goodsImageId} then goods_image.modified_time
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where goods_image_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.goodsImageId} 
+    </foreach>
+  </update>
+</mapper>

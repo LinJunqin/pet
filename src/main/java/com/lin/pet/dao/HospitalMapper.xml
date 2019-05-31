@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.HospitalMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Hospital">
+    <constructor>
+      <idArg column="hospital_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="hospital_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hospital_phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="owner_phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="owner_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="owner_password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="begin_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="end_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_deleted" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="lon" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="lat" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    hospital_id, hospital_name, hospital_phone, avatar, address, owner_phone, owner_name,
+    owner_password, create_time, modified_time, begin_time, end_time, is_deleted, type,
+    lon, lat
+  </sql>
+
+  <resultMap id="HospitalSimpleDTO" type="com.lin.pet.entity.dto.output.HospitalSimpleDTO">
+    <constructor>
+      <idArg column="hospital_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="hospital_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+    </constructor>
+  </resultMap>
+  <sql id="HospitalSimpleDTO">
+    hospital_id, hospital_name,avatar, type
+
+  </sql>
+
+  <resultMap id="HospitalDetailDTO" type="com.lin.pet.entity.dto.output.HospitalDetailDTO">
+    <constructor>
+      <idArg column="hospital_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="hospital_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hospital_phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="HospitalDetailDTO">
+    hospital_id, hospital_name,avatar, hospital_phone,address
+
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hospital
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </select>
+
+    <select id="selectByKey" resultMap="HospitalSimpleDTO" parameterType="string">
+      select
+      <include refid="HospitalSimpleDTO" />
+      from hospital
+      where hospital_name like CONCAT('%',#{key},'%')
+    </select>
+
+  <select id="selectByType" resultMap="HospitalSimpleDTO" parameterType="Byte">
+    select
+    <include refid="HospitalSimpleDTO" />
+    from hospital
+    where type = #{type,jdbcType=TINYINT} or #{type,jdbcType=TINYINT}>1
+  </select>
+
+
+  <select id="selectByHospitalId" resultMap="HospitalDetailDTO" parameterType="Long">
+    select
+    <include refid="HospitalDetailDTO" />
+    from hospital
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from hospital
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Hospital">
+    insert into hospital (hospital_id, hospital_name, hospital_phone, 
+      avatar, address, owner_phone, 
+      owner_name, owner_password, create_time, 
+      modified_time, begin_time, end_time, 
+      is_deleted, type, lon, 
+      lat)
+    values (#{hospitalId,jdbcType=BIGINT}, #{hospitalName,jdbcType=VARCHAR}, #{hospitalPhone,jdbcType=CHAR}, 
+      #{avatar,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{ownerPhone,jdbcType=CHAR}, 
+      #{ownerName,jdbcType=VARCHAR}, #{ownerPassword,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{beginTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{lon,jdbcType=DECIMAL}, 
+      #{lat,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Hospital">
+    insert into hospital
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="hospitalId != null">
+        hospital_id,
+      </if>
+      <if test="hospitalName != null">
+        hospital_name,
+      </if>
+      <if test="hospitalPhone != null">
+        hospital_phone,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="ownerPhone != null">
+        owner_phone,
+      </if>
+      <if test="ownerName != null">
+        owner_name,
+      </if>
+      <if test="ownerPassword != null">
+        owner_password,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="beginTime != null">
+        begin_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="lon != null">
+        lon,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="hospitalId != null">
+        #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="hospitalName != null">
+        #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalPhone != null">
+        #{hospitalPhone,jdbcType=CHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPhone != null">
+        #{ownerPhone,jdbcType=CHAR},
+      </if>
+      <if test="ownerName != null">
+        #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPassword != null">
+        #{ownerPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="lon != null">
+        #{lon,jdbcType=DECIMAL},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into hospital (hospital_id, hospital_name, hospital_phone, 
+      avatar, address, owner_phone, 
+      owner_name, owner_password, create_time, 
+      modified_time, begin_time, end_time, 
+      is_deleted, type, lon, 
+      lat)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.hospitalId,jdbcType=BIGINT}, #{item.hospitalName,jdbcType=VARCHAR}, #{item.hospitalPhone,jdbcType=CHAR}, 
+        #{item.avatar,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.ownerPhone,jdbcType=CHAR}, 
+        #{item.ownerName,jdbcType=VARCHAR}, #{item.ownerPassword,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.modifiedTime,jdbcType=TIMESTAMP}, #{item.beginTime,jdbcType=VARCHAR}, #{item.endTime,jdbcType=VARCHAR}, 
+        #{item.isDeleted,jdbcType=TINYINT}, #{item.type,jdbcType=TINYINT}, #{item.lon,jdbcType=DECIMAL}, 
+        #{item.lat,jdbcType=DECIMAL})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into hospital
+    (hospital_id, hospital_name, hospital_phone, avatar, address, owner_phone, owner_name, 
+      owner_password, create_time, modified_time, begin_time, end_time, is_deleted, type, 
+      lon, lat)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.hospitalId != null">
+          #{item.hospitalId,jdbcType=BIGINT},
+        </if>
+        <if test="item.hospitalId == null">
+          NULL,
+        </if>
+        <if test="item.hospitalName != null">
+          #{item.hospitalName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.hospitalName == null">
+          NULL,
+        </if>
+        <if test="item.hospitalPhone != null">
+          #{item.hospitalPhone,jdbcType=CHAR},
+        </if>
+        <if test="item.hospitalPhone == null">
+          NULL,
+        </if>
+        <if test="item.avatar != null">
+          #{item.avatar,jdbcType=VARCHAR},
+        </if>
+        <if test="item.avatar == null">
+          NULL,
+        </if>
+        <if test="item.address != null">
+          #{item.address,jdbcType=VARCHAR},
+        </if>
+        <if test="item.address == null">
+          NULL,
+        </if>
+        <if test="item.ownerPhone != null">
+          #{item.ownerPhone,jdbcType=CHAR},
+        </if>
+        <if test="item.ownerPhone == null">
+          NULL,
+        </if>
+        <if test="item.ownerName != null">
+          #{item.ownerName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.ownerName == null">
+          NULL,
+        </if>
+        <if test="item.ownerPassword != null">
+          #{item.ownerPassword,jdbcType=VARCHAR},
+        </if>
+        <if test="item.ownerPassword == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.beginTime != null">
+          #{item.beginTime,jdbcType=VARCHAR},
+        </if>
+        <if test="item.beginTime == null">
+          NULL,
+        </if>
+        <if test="item.endTime != null">
+          #{item.endTime,jdbcType=VARCHAR},
+        </if>
+        <if test="item.endTime == null">
+          NULL,
+        </if>
+        <if test="item.isDeleted != null">
+          #{item.isDeleted,jdbcType=TINYINT},
+        </if>
+        <if test="item.isDeleted == null">
+          NULL,
+        </if>
+        <if test="item.type != null">
+          #{item.type,jdbcType=TINYINT},
+        </if>
+        <if test="item.type == null">
+          NULL,
+        </if>
+        <if test="item.lon != null">
+          #{item.lon,jdbcType=DECIMAL},
+        </if>
+        <if test="item.lon == null">
+          NULL,
+        </if>
+        <if test="item.lat != null">
+          #{item.lat,jdbcType=DECIMAL},
+        </if>
+        <if test="item.lat == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Hospital">
+    update hospital
+    <set>
+      <if test="hospitalName != null">
+        hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalPhone != null">
+        hospital_phone = #{hospitalPhone,jdbcType=CHAR},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPhone != null">
+        owner_phone = #{ownerPhone,jdbcType=CHAR},
+      </if>
+      <if test="ownerName != null">
+        owner_name = #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPassword != null">
+        owner_password = #{ownerPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="lon != null">
+        lon = #{lon,jdbcType=DECIMAL},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Hospital">
+    update hospital
+    set hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      hospital_phone = #{hospitalPhone,jdbcType=CHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      owner_phone = #{ownerPhone,jdbcType=CHAR},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      owner_password = #{ownerPassword,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      begin_time = #{beginTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
+      lon = #{lon,jdbcType=DECIMAL},
+      lat = #{lat,jdbcType=DECIMAL}
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update hospital
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="hospitalName =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.hospitalName}
+        </foreach>
+      </trim>
+      <trim prefix="hospitalPhone =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.hospitalPhone}
+        </foreach>
+      </trim>
+      <trim prefix="avatar =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.avatar}
+        </foreach>
+      </trim>
+      <trim prefix="address =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.address}
+        </foreach>
+      </trim>
+      <trim prefix="ownerPhone =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.ownerPhone}
+        </foreach>
+      </trim>
+      <trim prefix="ownerName =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.ownerName}
+        </foreach>
+      </trim>
+      <trim prefix="ownerPassword =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.ownerPassword}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="beginTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.beginTime}
+        </foreach>
+      </trim>
+      <trim prefix="endTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.endTime}
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.isDeleted}
+        </foreach>
+      </trim>
+      <trim prefix="type =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.type}
+        </foreach>
+      </trim>
+      <trim prefix="lon =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.lon}
+        </foreach>
+      </trim>
+      <trim prefix="lat =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.hospitalId} then #{item.lat}
+        </foreach>
+      </trim>
+    </trim>
+    where hospital_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.hospitalId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update hospital
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="hospitalName =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.hospitalName != null ">
+            when  #{item.hospitalId} then #{item.hospitalName}
+          </if>
+          <if test="item.hospitalName == null ">
+            when  #{item.hospitalId} then hospital.hospital_name
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="hospitalPhone =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.hospitalPhone != null ">
+            when  #{item.hospitalId} then #{item.hospitalPhone}
+          </if>
+          <if test="item.hospitalPhone == null ">
+            when  #{item.hospitalId} then hospital.hospital_phone
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="avatar =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.avatar != null ">
+            when  #{item.hospitalId} then #{item.avatar}
+          </if>
+          <if test="item.avatar == null ">
+            when  #{item.hospitalId} then hospital.avatar
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="address =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.address != null ">
+            when  #{item.hospitalId} then #{item.address}
+          </if>
+          <if test="item.address == null ">
+            when  #{item.hospitalId} then hospital.address
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ownerPhone =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.ownerPhone != null ">
+            when  #{item.hospitalId} then #{item.ownerPhone}
+          </if>
+          <if test="item.ownerPhone == null ">
+            when  #{item.hospitalId} then hospital.owner_phone
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ownerName =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.ownerName != null ">
+            when  #{item.hospitalId} then #{item.ownerName}
+          </if>
+          <if test="item.ownerName == null ">
+            when  #{item.hospitalId} then hospital.owner_name
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ownerPassword =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.ownerPassword != null ">
+            when  #{item.hospitalId} then #{item.ownerPassword}
+          </if>
+          <if test="item.ownerPassword == null ">
+            when  #{item.hospitalId} then hospital.owner_password
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.hospitalId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.hospitalId} then hospital.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.hospitalId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.hospitalId} then hospital.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="beginTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.beginTime != null ">
+            when  #{item.hospitalId} then #{item.beginTime}
+          </if>
+          <if test="item.beginTime == null ">
+            when  #{item.hospitalId} then hospital.begin_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="endTime =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.endTime != null ">
+            when  #{item.hospitalId} then #{item.endTime}
+          </if>
+          <if test="item.endTime == null ">
+            when  #{item.hospitalId} then hospital.end_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.isDeleted != null ">
+            when  #{item.hospitalId} then #{item.isDeleted}
+          </if>
+          <if test="item.isDeleted == null ">
+            when  #{item.hospitalId} then hospital.is_deleted
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="type =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.type != null ">
+            when  #{item.hospitalId} then #{item.type}
+          </if>
+          <if test="item.type == null ">
+            when  #{item.hospitalId} then hospital.type
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="lon =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.lon != null ">
+            when  #{item.hospitalId} then #{item.lon}
+          </if>
+          <if test="item.lon == null ">
+            when  #{item.hospitalId} then hospital.lon
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="lat =case hospitalId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.lat != null ">
+            when  #{item.hospitalId} then #{item.lat}
+          </if>
+          <if test="item.lat == null ">
+            when  #{item.hospitalId} then hospital.lat
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where hospital_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.hospitalId} 
+    </foreach>
+  </update>
+</mapper>

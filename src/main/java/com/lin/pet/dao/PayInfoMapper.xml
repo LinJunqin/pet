@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.PayInfoMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.PayInfo">
+    <constructor>
+      <idArg column="pay_info_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="plaform_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    pay_info_id, user_id, plaform_name, order_no, create_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pay_info
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pay_info
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.PayInfo">
+    insert into pay_info (pay_info_id, user_id, plaform_name, 
+      order_no, create_time, modified_time
+      )
+    values (#{payInfoId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{plaformName,jdbcType=VARCHAR}, 
+      #{orderNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.PayInfo">
+    insert into pay_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="payInfoId != null">
+        pay_info_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="plaformName != null">
+        plaform_name,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="payInfoId != null">
+        #{payInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="plaformName != null">
+        #{plaformName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into pay_info (pay_info_id, user_id, plaform_name, 
+      order_no, create_time, modified_time
+      )
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.payInfoId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT}, #{item.plaformName,jdbcType=VARCHAR}, 
+        #{item.orderNo,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP}
+        )
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into pay_info
+    (pay_info_id, user_id, plaform_name, order_no, create_time, modified_time)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.payInfoId != null">
+          #{item.payInfoId,jdbcType=BIGINT},
+        </if>
+        <if test="item.payInfoId == null">
+          NULL,
+        </if>
+        <if test="item.userId != null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.userId == null">
+          NULL,
+        </if>
+        <if test="item.plaformName != null">
+          #{item.plaformName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.plaformName == null">
+          NULL,
+        </if>
+        <if test="item.orderNo != null">
+          #{item.orderNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.orderNo == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.PayInfo">
+    update pay_info
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="plaformName != null">
+        plaform_name = #{plaformName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.PayInfo">
+    update pay_info
+    set user_id = #{userId,jdbcType=BIGINT},
+      plaform_name = #{plaformName,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update pay_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="userId =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.payInfoId} then #{item.userId}
+        </foreach>
+      </trim>
+      <trim prefix="plaformName =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.payInfoId} then #{item.plaformName}
+        </foreach>
+      </trim>
+      <trim prefix="orderNo =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.payInfoId} then #{item.orderNo}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.payInfoId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.payInfoId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+    </trim>
+    where pay_info_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.payInfoId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update pay_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="userId =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.userId != null ">
+            when  #{item.payInfoId} then #{item.userId}
+          </if>
+          <if test="item.userId == null ">
+            when  #{item.payInfoId} then pay_info.user_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="plaformName =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.plaformName != null ">
+            when  #{item.payInfoId} then #{item.plaformName}
+          </if>
+          <if test="item.plaformName == null ">
+            when  #{item.payInfoId} then pay_info.plaform_name
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="orderNo =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.orderNo != null ">
+            when  #{item.payInfoId} then #{item.orderNo}
+          </if>
+          <if test="item.orderNo == null ">
+            when  #{item.payInfoId} then pay_info.order_no
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.payInfoId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.payInfoId} then pay_info.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case payInfoId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.payInfoId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.payInfoId} then pay_info.modified_time
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where pay_info_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.payInfoId} 
+    </foreach>
+  </update>
+</mapper>

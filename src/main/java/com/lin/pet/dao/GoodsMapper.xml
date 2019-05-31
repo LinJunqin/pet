@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Goods">
+    <constructor>
+      <idArg column="goods_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="store_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sum" javaType="java.lang.Short" jdbcType="SMALLINT" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="detail_image" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_deleted" javaType="java.lang.Byte" jdbcType="TINYINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    goods_id, store_id, name, sum, price, avatar, detail_image, create_time, modified_time, 
+    is_deleted
+  </sql>
+  <resultMap id="GoodsSampleDTO" type="com.lin.pet.entity.dto.output.GoodsSampleDTO">
+    <constructor>
+      <idArg column="goods_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="GoodsSampleDTO">
+    goods_id, name, price, avatar
+  </sql>
+
+  <resultMap id="GoodsDetailDTO" type="com.lin.pet.entity.dto.output.GoodsDetailDTO">
+    <constructor>
+      <idArg column="goods_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="sum" javaType="java.lang.Short" jdbcType="SMALLINT" />
+      <arg column="detail_image" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="store_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="GoodsDetailDTO">
+    goods_id,  name,  price,sum,detail_image,store_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </select>
+
+    <select id="selectSampleAll" resultMap="GoodsSampleDTO">
+      select
+      <include refid="GoodsSampleDTO"/>
+      from goods
+    </select>
+
+  <select id="selectByGoodsId" resultMap="GoodsDetailDTO" parameterType="Long">
+    select
+    <include refid="GoodsDetailDTO"/>
+    from goods
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </select>
+  <select id="selectSampleAllByKey" resultMap="GoodsSampleDTO" parameterType="string">
+    select
+    <include refid="GoodsSampleDTO"/>
+    from goods
+    where name like CONCAT('%',#{key},'%')
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from goods
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Goods">
+    insert into goods (goods_id, store_id, name, 
+      sum, price, avatar, 
+      detail_image, create_time, modified_time, 
+      is_deleted)
+    values (#{goodsId,jdbcType=BIGINT}, #{storeId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{sum,jdbcType=SMALLINT}, #{price,jdbcType=DECIMAL}, #{avatar,jdbcType=VARCHAR}, 
+      #{detailImage,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Goods">
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sum != null">
+        sum,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="detailImage != null">
+        detail_image,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sum != null">
+        #{sum,jdbcType=SMALLINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="detailImage != null">
+        #{detailImage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into goods (goods_id, store_id, name, 
+      sum, price, avatar, 
+      detail_image, create_time, modified_time, 
+      is_deleted)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.goodsId,jdbcType=BIGINT}, #{item.storeId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, 
+        #{item.sum,jdbcType=SMALLINT}, #{item.price,jdbcType=DECIMAL}, #{item.avatar,jdbcType=VARCHAR}, 
+        #{item.detailImage,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP}, 
+        #{item.isDeleted,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into goods
+    (goods_id, store_id, name, sum, price, avatar, detail_image, create_time, modified_time, 
+      is_deleted)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.goodsId != null">
+          #{item.goodsId,jdbcType=BIGINT},
+        </if>
+        <if test="item.goodsId == null">
+          NULL,
+        </if>
+        <if test="item.storeId != null">
+          #{item.storeId,jdbcType=BIGINT},
+        </if>
+        <if test="item.storeId == null">
+          NULL,
+        </if>
+        <if test="item.name != null">
+          #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.name == null">
+          NULL,
+        </if>
+        <if test="item.sum != null">
+          #{item.sum,jdbcType=SMALLINT},
+        </if>
+        <if test="item.sum == null">
+          NULL,
+        </if>
+        <if test="item.price != null">
+          #{item.price,jdbcType=DECIMAL},
+        </if>
+        <if test="item.price == null">
+          NULL,
+        </if>
+        <if test="item.avatar != null">
+          #{item.avatar,jdbcType=VARCHAR},
+        </if>
+        <if test="item.avatar == null">
+          NULL,
+        </if>
+        <if test="item.detailImage != null">
+          #{item.detailImage,jdbcType=VARCHAR},
+        </if>
+        <if test="item.detailImage == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.isDeleted != null">
+          #{item.isDeleted,jdbcType=TINYINT},
+        </if>
+        <if test="item.isDeleted == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Goods">
+    update goods
+    <set>
+      <if test="storeId != null">
+        store_id = #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sum != null">
+        sum = #{sum,jdbcType=SMALLINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="detailImage != null">
+        detail_image = #{detailImage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Goods">
+    update goods
+    set store_id = #{storeId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      sum = #{sum,jdbcType=SMALLINT},
+      price = #{price,jdbcType=DECIMAL},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      detail_image = #{detailImage,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=TINYINT}
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update goods
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="storeId =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.storeId}
+        </foreach>
+      </trim>
+      <trim prefix="name =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.name}
+        </foreach>
+      </trim>
+      <trim prefix="sum =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.sum}
+        </foreach>
+      </trim>
+      <trim prefix="price =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.price}
+        </foreach>
+      </trim>
+      <trim prefix="avatar =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.avatar}
+        </foreach>
+      </trim>
+      <trim prefix="detailImage =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.detailImage}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.goodsId} then #{item.isDeleted}
+        </foreach>
+      </trim>
+    </trim>
+    where goods_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.goodsId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update goods
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="storeId =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.storeId != null ">
+            when  #{item.goodsId} then #{item.storeId}
+          </if>
+          <if test="item.storeId == null ">
+            when  #{item.goodsId} then goods.store_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="name =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.name != null ">
+            when  #{item.goodsId} then #{item.name}
+          </if>
+          <if test="item.name == null ">
+            when  #{item.goodsId} then goods.name
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="sum =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.sum != null ">
+            when  #{item.goodsId} then #{item.sum}
+          </if>
+          <if test="item.sum == null ">
+            when  #{item.goodsId} then goods.sum
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="price =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.price != null ">
+            when  #{item.goodsId} then #{item.price}
+          </if>
+          <if test="item.price == null ">
+            when  #{item.goodsId} then goods.price
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="avatar =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.avatar != null ">
+            when  #{item.goodsId} then #{item.avatar}
+          </if>
+          <if test="item.avatar == null ">
+            when  #{item.goodsId} then goods.avatar
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="detailImage =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.detailImage != null ">
+            when  #{item.goodsId} then #{item.detailImage}
+          </if>
+          <if test="item.detailImage == null ">
+            when  #{item.goodsId} then goods.detail_image
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.goodsId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.goodsId} then goods.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.goodsId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.goodsId} then goods.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case goodsId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.isDeleted != null ">
+            when  #{item.goodsId} then #{item.isDeleted}
+          </if>
+          <if test="item.isDeleted == null ">
+            when  #{item.goodsId} then goods.is_deleted
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where goods_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.goodsId} 
+    </foreach>
+  </update>
+</mapper>

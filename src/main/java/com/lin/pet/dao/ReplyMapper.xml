@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.ReplyMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Reply">
+    <constructor>
+      <idArg column="reply_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="comment_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="mofidied_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    reply_id, comment_id, content, create_time, mofidied_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from reply
+    where reply_id = #{replyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from reply
+    where reply_id = #{replyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Reply">
+    insert into reply (reply_id, comment_id, content, 
+      create_time, mofidied_time)
+    values (#{replyId,jdbcType=BIGINT}, #{commentId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{mofidiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Reply">
+    insert into reply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="replyId != null">
+        reply_id,
+      </if>
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="mofidiedTime != null">
+        mofidied_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="replyId != null">
+        #{replyId,jdbcType=BIGINT},
+      </if>
+      <if test="commentId != null">
+        #{commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mofidiedTime != null">
+        #{mofidiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into reply (reply_id, comment_id, content, 
+      create_time, mofidied_time)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.replyId,jdbcType=BIGINT}, #{item.commentId,jdbcType=VARCHAR}, #{item.content,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.mofidiedTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into reply
+    (reply_id, comment_id, content, create_time, mofidied_time)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.replyId != null">
+          #{item.replyId,jdbcType=BIGINT},
+        </if>
+        <if test="item.replyId == null">
+          NULL,
+        </if>
+        <if test="item.commentId != null">
+          #{item.commentId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.commentId == null">
+          NULL,
+        </if>
+        <if test="item.content != null">
+          #{item.content,jdbcType=VARCHAR},
+        </if>
+        <if test="item.content == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.mofidiedTime != null">
+          #{item.mofidiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.mofidiedTime == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Reply">
+    update reply
+    <set>
+      <if test="commentId != null">
+        comment_id = #{commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mofidiedTime != null">
+        mofidied_time = #{mofidiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where reply_id = #{replyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Reply">
+    update reply
+    set comment_id = #{commentId,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      mofidied_time = #{mofidiedTime,jdbcType=TIMESTAMP}
+    where reply_id = #{replyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update reply
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="commentId =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.replyId} then #{item.commentId}
+        </foreach>
+      </trim>
+      <trim prefix="content =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.replyId} then #{item.content}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.replyId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="mofidiedTime =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.replyId} then #{item.mofidiedTime}
+        </foreach>
+      </trim>
+    </trim>
+    where reply_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.replyId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update reply
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="commentId =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.commentId != null ">
+            when  #{item.replyId} then #{item.commentId}
+          </if>
+          <if test="item.commentId == null ">
+            when  #{item.replyId} then reply.comment_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="content =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.content != null ">
+            when  #{item.replyId} then #{item.content}
+          </if>
+          <if test="item.content == null ">
+            when  #{item.replyId} then reply.content
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.replyId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.replyId} then reply.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="mofidiedTime =case replyId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.mofidiedTime != null ">
+            when  #{item.replyId} then #{item.mofidiedTime}
+          </if>
+          <if test="item.mofidiedTime == null ">
+            when  #{item.replyId} then reply.mofidied_time
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where reply_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.replyId} 
+    </foreach>
+  </update>
+</mapper>

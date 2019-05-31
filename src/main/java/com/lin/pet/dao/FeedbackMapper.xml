@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.FeedbackMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Feedback">
+    <constructor>
+      <idArg column="feedback_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    feedback_id, content, create_time, modified_time, user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from feedback
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from feedback
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Feedback">
+    insert into feedback (feedback_id, content, create_time, 
+      modified_time, user_id)
+    values (#{feedbackId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Feedback">
+    insert into feedback
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="feedbackId != null">
+        feedback_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="feedbackId != null">
+        #{feedbackId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into feedback (feedback_id, content, create_time, 
+      modified_time, user_id)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.feedbackId,jdbcType=BIGINT}, #{item.content,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.modifiedTime,jdbcType=TIMESTAMP}, #{item.userId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into feedback
+    (feedback_id, content, create_time, modified_time, user_id)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.feedbackId != null">
+          #{item.feedbackId,jdbcType=BIGINT},
+        </if>
+        <if test="item.feedbackId == null">
+          NULL,
+        </if>
+        <if test="item.content != null">
+          #{item.content,jdbcType=VARCHAR},
+        </if>
+        <if test="item.content == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.userId != null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.userId == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Feedback">
+    update feedback
+    <set>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Feedback">
+    update feedback
+    set content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=BIGINT}
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update feedback
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="content =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.feedbackId} then #{item.content}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.feedbackId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.feedbackId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="userId =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.feedbackId} then #{item.userId}
+        </foreach>
+      </trim>
+    </trim>
+    where feedback_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.feedbackId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update feedback
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="content =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.content != null ">
+            when  #{item.feedbackId} then #{item.content}
+          </if>
+          <if test="item.content == null ">
+            when  #{item.feedbackId} then feedback.content
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.feedbackId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.feedbackId} then feedback.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.feedbackId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.feedbackId} then feedback.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="userId =case feedbackId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.userId != null ">
+            when  #{item.feedbackId} then #{item.userId}
+          </if>
+          <if test="item.userId == null ">
+            when  #{item.feedbackId} then feedback.user_id
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where feedback_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.feedbackId} 
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.User">
+    <constructor>
+      <idArg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="gender" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="login_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, phone, username, gender, avatar, create_time, modified_time, login_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+    <select id="selectByPhone"  resultMap="BaseResultMap" parameterType="string">
+      select
+      <include refid="Base_Column_List" />
+      from user
+      where phone = #{phone,jdbcType=CHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.User">
+    insert into user (user_id, phone, username, 
+      gender, avatar, create_time, 
+      modified_time, login_time)
+    values (#{userId,jdbcType=BIGINT}, #{phone,jdbcType=CHAR}, #{username,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=BIT}, #{avatar,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{loginTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into user (user_id, phone, username, 
+      gender, avatar, create_time, 
+      modified_time, login_time)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.userId,jdbcType=BIGINT}, #{item.phone,jdbcType=CHAR}, #{item.username,jdbcType=VARCHAR}, 
+        #{item.gender,jdbcType=BIT}, #{item.avatar,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.modifiedTime,jdbcType=TIMESTAMP}, #{item.loginTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into user
+    (user_id, phone, username, gender, avatar, create_time, modified_time, login_time
+      )
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.userId != null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.userId == null">
+          NULL,
+        </if>
+        <if test="item.phone != null">
+          #{item.phone,jdbcType=CHAR},
+        </if>
+        <if test="item.phone == null">
+          NULL,
+        </if>
+        <if test="item.username != null">
+          #{item.username,jdbcType=VARCHAR},
+        </if>
+        <if test="item.username == null">
+          NULL,
+        </if>
+        <if test="item.gender != null">
+          #{item.gender,jdbcType=BIT},
+        </if>
+        <if test="item.gender == null">
+          NULL,
+        </if>
+        <if test="item.avatar != null">
+          #{item.avatar,jdbcType=VARCHAR},
+        </if>
+        <if test="item.avatar == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.loginTime != null">
+          #{item.loginTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.loginTime == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.User">
+    update user
+    <set>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=BIT},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.User">
+    update user
+    set phone = #{phone,jdbcType=CHAR},
+      username = #{username,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=BIT},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      login_time = #{loginTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update user
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="phone =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.userId} then #{item.phone}
+        </foreach>
+      </trim>
+      <trim prefix="username =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.userId} then #{item.username}
+        </foreach>
+      </trim>
+      <trim prefix="gender =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.userId} then #{item.gender}
+        </foreach>
+      </trim>
+      <trim prefix="avatar =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.userId} then #{item.avatar}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.userId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.userId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="loginTime =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.userId} then #{item.loginTime}
+        </foreach>
+      </trim>
+    </trim>
+    where user_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.userId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update user
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="phone =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.phone != null ">
+            when  #{item.userId} then #{item.phone}
+          </if>
+          <if test="item.phone == null ">
+            when  #{item.userId} then user.phone
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="username =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.username != null ">
+            when  #{item.userId} then #{item.username}
+          </if>
+          <if test="item.username == null ">
+            when  #{item.userId} then user.username
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="gender =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.gender != null ">
+            when  #{item.userId} then #{item.gender}
+          </if>
+          <if test="item.gender == null ">
+            when  #{item.userId} then user.gender
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="avatar =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.avatar != null ">
+            when  #{item.userId} then #{item.avatar}
+          </if>
+          <if test="item.avatar == null ">
+            when  #{item.userId} then user.avatar
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.userId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.userId} then user.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.userId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.userId} then user.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="loginTime =case userId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.loginTime != null ">
+            when  #{item.userId} then #{item.loginTime}
+          </if>
+          <if test="item.loginTime == null ">
+            when  #{item.userId} then user.login_time
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where user_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.userId} 
+    </foreach>
+  </update>
+</mapper>

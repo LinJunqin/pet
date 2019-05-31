@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.AddressMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Address">
+    <constructor>
+      <idArg column="address_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="province" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="city" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="county" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="detail" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_main" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    address_id, user_id, province, city, county, detail, create_time, modified_time, 
+    is_main, phone, name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from address
+    where address_id = #{addressId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll"  parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from address
+    where user_id = #{user_id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from address
+    where user_id = #{user_id,jdbcType=BIGINT} and is_main = 1
+    limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from address
+    where address_id = #{addressId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Address">
+    insert into address (address_id, user_id, province, 
+      city, county, detail, 
+      create_time, modified_time, is_main, 
+      phone, name)
+    values (#{addressId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{isMain,jdbcType=TINYINT}, 
+      #{phone,jdbcType=CHAR}, #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Address">
+    insert into address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="addressId != null">
+        address_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isMain != null">
+        is_main,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="addressId != null">
+        #{addressId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isMain != null">
+        #{isMain,jdbcType=TINYINT},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into address (address_id, user_id, province, 
+      city, county, detail, 
+      create_time, modified_time, 
+      is_main, phone, name
+      )
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.addressId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT}, #{item.province,jdbcType=VARCHAR}, 
+        #{item.city,jdbcType=VARCHAR}, #{item.county,jdbcType=VARCHAR}, #{item.detail,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP}, 
+        #{item.isMain,jdbcType=TINYINT}, #{item.phone,jdbcType=CHAR}, #{item.name,jdbcType=VARCHAR}
+        )
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into address
+    (address_id, user_id, province, city, county, detail, create_time, modified_time, 
+      is_main, phone, name)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.addressId != null">
+          #{item.addressId,jdbcType=BIGINT},
+        </if>
+        <if test="item.addressId == null">
+          NULL,
+        </if>
+        <if test="item.userId != null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.userId == null">
+          NULL,
+        </if>
+        <if test="item.province != null">
+          #{item.province,jdbcType=VARCHAR},
+        </if>
+        <if test="item.province == null">
+          NULL,
+        </if>
+        <if test="item.city != null">
+          #{item.city,jdbcType=VARCHAR},
+        </if>
+        <if test="item.city == null">
+          NULL,
+        </if>
+        <if test="item.county != null">
+          #{item.county,jdbcType=VARCHAR},
+        </if>
+        <if test="item.county == null">
+          NULL,
+        </if>
+        <if test="item.detail != null">
+          #{item.detail,jdbcType=VARCHAR},
+        </if>
+        <if test="item.detail == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.isMain != null">
+          #{item.isMain,jdbcType=TINYINT},
+        </if>
+        <if test="item.isMain == null">
+          NULL,
+        </if>
+        <if test="item.phone != null">
+          #{item.phone,jdbcType=CHAR},
+        </if>
+        <if test="item.phone == null">
+          NULL,
+        </if>
+        <if test="item.name != null">
+          #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.name == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Address">
+    update address
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isMain != null">
+        is_main = #{isMain,jdbcType=TINYINT},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where address_id = #{addressId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Address">
+    update address
+    set user_id = #{userId,jdbcType=BIGINT},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_main = #{isMain,jdbcType=TINYINT},
+      phone = #{phone,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR}
+    where address_id = #{addressId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update address
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="userId =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.userId}
+        </foreach>
+      </trim>
+      <trim prefix="province =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.province}
+        </foreach>
+      </trim>
+      <trim prefix="city =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.city}
+        </foreach>
+      </trim>
+      <trim prefix="county =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.county}
+        </foreach>
+      </trim>
+      <trim prefix="detail =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.detail}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="isMain =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.isMain}
+        </foreach>
+      </trim>
+      <trim prefix="phone =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.phone}
+        </foreach>
+      </trim>
+      <trim prefix="name =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.addressId} then #{item.name}
+        </foreach>
+      </trim>
+    </trim>
+    where address_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.addressId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update address
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="userId =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.userId != null ">
+            when  #{item.addressId} then #{item.userId}
+          </if>
+          <if test="item.userId == null ">
+            when  #{item.addressId} then address.user_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="province =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.province != null ">
+            when  #{item.addressId} then #{item.province}
+          </if>
+          <if test="item.province == null ">
+            when  #{item.addressId} then address.province
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="city =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.city != null ">
+            when  #{item.addressId} then #{item.city}
+          </if>
+          <if test="item.city == null ">
+            when  #{item.addressId} then address.city
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="county =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.county != null ">
+            when  #{item.addressId} then #{item.county}
+          </if>
+          <if test="item.county == null ">
+            when  #{item.addressId} then address.county
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="detail =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.detail != null ">
+            when  #{item.addressId} then #{item.detail}
+          </if>
+          <if test="item.detail == null ">
+            when  #{item.addressId} then address.detail
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.addressId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.addressId} then address.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.addressId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.addressId} then address.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="isMain =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.isMain != null ">
+            when  #{item.addressId} then #{item.isMain}
+          </if>
+          <if test="item.isMain == null ">
+            when  #{item.addressId} then address.is_main
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="phone =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.phone != null ">
+            when  #{item.addressId} then #{item.phone}
+          </if>
+          <if test="item.phone == null ">
+            when  #{item.addressId} then address.phone
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="name =case addressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.name != null ">
+            when  #{item.addressId} then #{item.name}
+          </if>
+          <if test="item.name == null ">
+            when  #{item.addressId} then address.name
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where address_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.addressId} 
+    </foreach>
+  </update>
+  <update id="updateMainByUserId" parameterType="Long">
+      update address
+      set is_main = 0
+      where user_id = #{userId,jdbcType=BIGINT}
+
+    </update>
+</mapper>

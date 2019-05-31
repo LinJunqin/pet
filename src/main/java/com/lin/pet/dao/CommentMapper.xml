@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Comment">
+    <constructor>
+      <idArg column="comment_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="preorder_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="score" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="hospital_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    comment_id, preorder_id, score, content, create_time, modified_time, hospital_id, 
+    user_id
+  </sql>
+  <resultMap id="CommentDTO" type="com.lin.pet.entity.dto.output.CommentDTO">
+    <constructor>
+      <idArg column="comment_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+
+      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByHospitalId" resultType="java.lang.Double" parameterType="Long">
+    select avg(score) as score
+    from comment
+    group by hospital_id
+    having hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectDetailByHospitalId" resultMap="CommentDTO" parameterType="Long">
+    select t2.comment_id,t2.content,t2.create_time,t2.user_id,t1.username,t1.avatar
+    from user as t1 left join comment as t2 on t1.user_id = t2.user_id
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Comment">
+    insert into comment (comment_id, preorder_id, score, 
+      content, create_time, modified_time, 
+      hospital_id, user_id)
+    values (#{commentId,jdbcType=BIGINT}, #{preorderId,jdbcType=BIGINT}, #{score,jdbcType=DECIMAL}, 
+      #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{hospitalId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Comment">
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="preorderId != null">
+        preorder_id,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="hospitalId != null">
+        hospital_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        #{commentId,jdbcType=BIGINT},
+      </if>
+      <if test="preorderId != null">
+        #{preorderId,jdbcType=BIGINT},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hospitalId != null">
+        #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into comment (comment_id, preorder_id, score, 
+      content, create_time, modified_time, 
+      hospital_id, user_id)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.commentId,jdbcType=BIGINT}, #{item.preorderId,jdbcType=BIGINT}, #{item.score,jdbcType=DECIMAL}, 
+        #{item.content,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP}, 
+        #{item.hospitalId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into comment
+    (comment_id, preorder_id, score, content, create_time, modified_time, hospital_id, 
+      user_id)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.commentId != null">
+          #{item.commentId,jdbcType=BIGINT},
+        </if>
+        <if test="item.commentId == null">
+          NULL,
+        </if>
+        <if test="item.preorderId != null">
+          #{item.preorderId,jdbcType=BIGINT},
+        </if>
+        <if test="item.preorderId == null">
+          NULL,
+        </if>
+        <if test="item.score != null">
+          #{item.score,jdbcType=DECIMAL},
+        </if>
+        <if test="item.score == null">
+          NULL,
+        </if>
+        <if test="item.content != null">
+          #{item.content,jdbcType=VARCHAR},
+        </if>
+        <if test="item.content == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.hospitalId != null">
+          #{item.hospitalId,jdbcType=BIGINT},
+        </if>
+        <if test="item.hospitalId == null">
+          NULL,
+        </if>
+        <if test="item.userId != null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.userId == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Comment">
+    update comment
+    <set>
+      <if test="preorderId != null">
+        preorder_id = #{preorderId,jdbcType=BIGINT},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hospitalId != null">
+        hospital_id = #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Comment">
+    update comment
+    set preorder_id = #{preorderId,jdbcType=BIGINT},
+      score = #{score,jdbcType=DECIMAL},
+      content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      hospital_id = #{hospitalId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT}
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update comment
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="preorderId =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.commentId} then #{item.preorderId}
+        </foreach>
+      </trim>
+      <trim prefix="score =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.commentId} then #{item.score}
+        </foreach>
+      </trim>
+      <trim prefix="content =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.commentId} then #{item.content}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.commentId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.commentId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="hospitalId =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.commentId} then #{item.hospitalId}
+        </foreach>
+      </trim>
+      <trim prefix="userId =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.commentId} then #{item.userId}
+        </foreach>
+      </trim>
+    </trim>
+    where comment_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.commentId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update comment
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="preorderId =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.preorderId != null ">
+            when  #{item.commentId} then #{item.preorderId}
+          </if>
+          <if test="item.preorderId == null ">
+            when  #{item.commentId} then comment.preorder_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="score =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.score != null ">
+            when  #{item.commentId} then #{item.score}
+          </if>
+          <if test="item.score == null ">
+            when  #{item.commentId} then comment.score
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="content =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.content != null ">
+            when  #{item.commentId} then #{item.content}
+          </if>
+          <if test="item.content == null ">
+            when  #{item.commentId} then comment.content
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.commentId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.commentId} then comment.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.commentId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.commentId} then comment.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="hospitalId =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.hospitalId != null ">
+            when  #{item.commentId} then #{item.hospitalId}
+          </if>
+          <if test="item.hospitalId == null ">
+            when  #{item.commentId} then comment.hospital_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="userId =case commentId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.userId != null ">
+            when  #{item.commentId} then #{item.userId}
+          </if>
+          <if test="item.userId == null ">
+            when  #{item.commentId} then comment.user_id
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where comment_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.commentId} 
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.StoreMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Store">
+    <constructor>
+      <idArg column="store_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="owner_phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="owner_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="owner_password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="store_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="store_avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_deleted" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    store_id, owner_phone, owner_name, owner_password, store_name, store_avatar, is_deleted, 
+    create_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from store
+    where store_id = #{storeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from store
+    where store_id = #{storeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Store">
+    insert into store (store_id, owner_phone, owner_name, 
+      owner_password, store_name, store_avatar, 
+      is_deleted, create_time, modified_time
+      )
+    values (#{storeId,jdbcType=BIGINT}, #{ownerPhone,jdbcType=CHAR}, #{ownerName,jdbcType=VARCHAR}, 
+      #{ownerPassword,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR}, #{storeAvatar,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Store">
+    insert into store
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="ownerPhone != null">
+        owner_phone,
+      </if>
+      <if test="ownerName != null">
+        owner_name,
+      </if>
+      <if test="ownerPassword != null">
+        owner_password,
+      </if>
+      <if test="storeName != null">
+        store_name,
+      </if>
+      <if test="storeAvatar != null">
+        store_avatar,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storeId != null">
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="ownerPhone != null">
+        #{ownerPhone,jdbcType=CHAR},
+      </if>
+      <if test="ownerName != null">
+        #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPassword != null">
+        #{ownerPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null">
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeAvatar != null">
+        #{storeAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into store (store_id, owner_phone, owner_name, 
+      owner_password, store_name, store_avatar, 
+      is_deleted, create_time, modified_time
+      )
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.storeId,jdbcType=BIGINT}, #{item.ownerPhone,jdbcType=CHAR}, #{item.ownerName,jdbcType=VARCHAR}, 
+        #{item.ownerPassword,jdbcType=VARCHAR}, #{item.storeName,jdbcType=VARCHAR}, #{item.storeAvatar,jdbcType=VARCHAR}, 
+        #{item.isDeleted,jdbcType=TINYINT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP}
+        )
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into store
+    (store_id, owner_phone, owner_name, owner_password, store_name, store_avatar, is_deleted, 
+      create_time, modified_time)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.storeId != null">
+          #{item.storeId,jdbcType=BIGINT},
+        </if>
+        <if test="item.storeId == null">
+          NULL,
+        </if>
+        <if test="item.ownerPhone != null">
+          #{item.ownerPhone,jdbcType=CHAR},
+        </if>
+        <if test="item.ownerPhone == null">
+          NULL,
+        </if>
+        <if test="item.ownerName != null">
+          #{item.ownerName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.ownerName == null">
+          NULL,
+        </if>
+        <if test="item.ownerPassword != null">
+          #{item.ownerPassword,jdbcType=VARCHAR},
+        </if>
+        <if test="item.ownerPassword == null">
+          NULL,
+        </if>
+        <if test="item.storeName != null">
+          #{item.storeName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.storeName == null">
+          NULL,
+        </if>
+        <if test="item.storeAvatar != null">
+          #{item.storeAvatar,jdbcType=VARCHAR},
+        </if>
+        <if test="item.storeAvatar == null">
+          NULL,
+        </if>
+        <if test="item.isDeleted != null">
+          #{item.isDeleted,jdbcType=TINYINT},
+        </if>
+        <if test="item.isDeleted == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Store">
+    update store
+    <set>
+      <if test="ownerPhone != null">
+        owner_phone = #{ownerPhone,jdbcType=CHAR},
+      </if>
+      <if test="ownerName != null">
+        owner_name = #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPassword != null">
+        owner_password = #{ownerPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null">
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeAvatar != null">
+        store_avatar = #{storeAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where store_id = #{storeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Store">
+    update store
+    set owner_phone = #{ownerPhone,jdbcType=CHAR},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      owner_password = #{ownerPassword,jdbcType=VARCHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      store_avatar = #{storeAvatar,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where store_id = #{storeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update store
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="ownerPhone =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.ownerPhone}
+        </foreach>
+      </trim>
+      <trim prefix="ownerName =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.ownerName}
+        </foreach>
+      </trim>
+      <trim prefix="ownerPassword =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.ownerPassword}
+        </foreach>
+      </trim>
+      <trim prefix="storeName =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.storeName}
+        </foreach>
+      </trim>
+      <trim prefix="storeAvatar =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.storeAvatar}
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.isDeleted}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.storeId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+    </trim>
+    where store_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.storeId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update store
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="ownerPhone =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.ownerPhone != null ">
+            when  #{item.storeId} then #{item.ownerPhone}
+          </if>
+          <if test="item.ownerPhone == null ">
+            when  #{item.storeId} then store.owner_phone
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ownerName =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.ownerName != null ">
+            when  #{item.storeId} then #{item.ownerName}
+          </if>
+          <if test="item.ownerName == null ">
+            when  #{item.storeId} then store.owner_name
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ownerPassword =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.ownerPassword != null ">
+            when  #{item.storeId} then #{item.ownerPassword}
+          </if>
+          <if test="item.ownerPassword == null ">
+            when  #{item.storeId} then store.owner_password
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="storeName =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.storeName != null ">
+            when  #{item.storeId} then #{item.storeName}
+          </if>
+          <if test="item.storeName == null ">
+            when  #{item.storeId} then store.store_name
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="storeAvatar =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.storeAvatar != null ">
+            when  #{item.storeId} then #{item.storeAvatar}
+          </if>
+          <if test="item.storeAvatar == null ">
+            when  #{item.storeId} then store.store_avatar
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.isDeleted != null ">
+            when  #{item.storeId} then #{item.isDeleted}
+          </if>
+          <if test="item.isDeleted == null ">
+            when  #{item.storeId} then store.is_deleted
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.storeId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.storeId} then store.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case storeId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.storeId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.storeId} then store.modified_time
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where store_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.storeId} 
+    </foreach>
+  </update>
+</mapper>

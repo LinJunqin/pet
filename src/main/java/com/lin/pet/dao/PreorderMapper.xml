@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.PreorderMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.Preorder">
+    <constructor>
+      <idArg column="preorder_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="hospital_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="project_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="arrive_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="reason" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_deleted" javaType="java.lang.Byte" jdbcType="TINYINT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="PreorderSampleDTO" type="com.lin.pet.entity.dto.output.PreorderSampleDTO">
+    <constructor>
+      <arg column="hospital_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="hospital_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hospital_phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="preorder_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="arrive_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="project_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    preorder_id, hospital_id, project_id, user_id, arrive_time, status, reason, create_time, 
+    modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from preorder
+    where preorder_id = #{preorderId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectDetailByUserId" resultMap="PreorderSampleDTO" parameterType="Long">
+    select t1.hospital_id,t1.hospital_name,t1.avatar,t1.address,t1.hospital_phone,t2.preorder_id,t2.arrive_time,t2.status,t3.project_id,t3.title
+    from (hospital t1 left join preorder t2 on t1.hospital_id = t2.hospital_id) left join project t3 on t2.project_id = t3.project_id
+     where t2.user_id = #{userId,jdbcType=BIGINT} and t2.is_deleted = 0
+
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from preorder
+    where preorder_id = #{preorderId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.Preorder">
+    insert into preorder (preorder_id, hospital_id, project_id, 
+      user_id, arrive_time, status, 
+      reason, create_time, modified_time, 
+      is_deleted)
+    values (#{preorderId,jdbcType=BIGINT}, #{hospitalId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, 
+      #{userId,jdbcType=BIGINT}, #{arriveTime,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{reason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.Preorder">
+    insert into preorder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="preorderId != null">
+        preorder_id,
+      </if>
+      <if test="hospitalId != null">
+        hospital_id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="arriveTime != null">
+        arrive_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="preorderId != null">
+        #{preorderId,jdbcType=BIGINT},
+      </if>
+      <if test="hospitalId != null">
+        #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="arriveTime != null">
+        #{arriveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into preorder (preorder_id, hospital_id, project_id, 
+      user_id, arrive_time, status, 
+      reason, create_time, modified_time, 
+      is_deleted)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.preorderId,jdbcType=BIGINT}, #{item.hospitalId,jdbcType=BIGINT}, #{item.projectId,jdbcType=BIGINT}, 
+        #{item.userId,jdbcType=BIGINT}, #{item.arriveTime,jdbcType=VARCHAR}, #{item.status,jdbcType=TINYINT}, 
+        #{item.reason,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP}, 
+        #{item.isDeleted,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into preorder
+    (preorder_id, hospital_id, project_id, user_id, arrive_time, status, reason, create_time, 
+      modified_time, is_deleted)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.preorderId != null">
+          #{item.preorderId,jdbcType=BIGINT},
+        </if>
+        <if test="item.preorderId == null">
+          NULL,
+        </if>
+        <if test="item.hospitalId != null">
+          #{item.hospitalId,jdbcType=BIGINT},
+        </if>
+        <if test="item.hospitalId == null">
+          NULL,
+        </if>
+        <if test="item.projectId != null">
+          #{item.projectId,jdbcType=BIGINT},
+        </if>
+        <if test="item.projectId == null">
+          NULL,
+        </if>
+        <if test="item.userId != null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="item.userId == null">
+          NULL,
+        </if>
+        <if test="item.arriveTime != null">
+          #{item.arriveTime,jdbcType=VARCHAR},
+        </if>
+        <if test="item.arriveTime == null">
+          NULL,
+        </if>
+        <if test="item.status != null">
+          #{item.status,jdbcType=TINYINT},
+        </if>
+        <if test="item.status == null">
+          NULL,
+        </if>
+        <if test="item.reason != null">
+          #{item.reason,jdbcType=VARCHAR},
+        </if>
+        <if test="item.reason == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.isDeleted != null">
+          #{item.isDeleted,jdbcType=TINYINT},
+        </if>
+        <if test="item.isDeleted == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.Preorder">
+    update preorder
+    <set>
+      <if test="hospitalId != null">
+        hospital_id = #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="arriveTime != null">
+        arrive_time = #{arriveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where preorder_id = #{preorderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.Preorder">
+    update preorder
+    set hospital_id = #{hospitalId,jdbcType=BIGINT},
+      project_id = #{projectId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      arrive_time = #{arriveTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=TINYINT}
+    where preorder_id = #{preorderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update preorder
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="hospitalId =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.hospitalId}
+        </foreach>
+      </trim>
+      <trim prefix="projectId =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.projectId}
+        </foreach>
+      </trim>
+      <trim prefix="userId =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.userId}
+        </foreach>
+      </trim>
+      <trim prefix="arriveTime =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.arriveTime}
+        </foreach>
+      </trim>
+      <trim prefix="status =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.status}
+        </foreach>
+      </trim>
+      <trim prefix="reason =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.reason}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.preorderId} then #{item.isDeleted}
+        </foreach>
+      </trim>
+    </trim>
+    where preorder_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.preorderId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update preorder
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="hospitalId =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.hospitalId != null ">
+            when  #{item.preorderId} then #{item.hospitalId}
+          </if>
+          <if test="item.hospitalId == null ">
+            when  #{item.preorderId} then preorder.hospital_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="projectId =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.projectId != null ">
+            when  #{item.preorderId} then #{item.projectId}
+          </if>
+          <if test="item.projectId == null ">
+            when  #{item.preorderId} then preorder.project_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="userId =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.userId != null ">
+            when  #{item.preorderId} then #{item.userId}
+          </if>
+          <if test="item.userId == null ">
+            when  #{item.preorderId} then preorder.user_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="arriveTime =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.arriveTime != null ">
+            when  #{item.preorderId} then #{item.arriveTime}
+          </if>
+          <if test="item.arriveTime == null ">
+            when  #{item.preorderId} then preorder.arrive_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="status =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.status != null ">
+            when  #{item.preorderId} then #{item.status}
+          </if>
+          <if test="item.status == null ">
+            when  #{item.preorderId} then preorder.status
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="reason =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.reason != null ">
+            when  #{item.preorderId} then #{item.reason}
+          </if>
+          <if test="item.reason == null ">
+            when  #{item.preorderId} then preorder.reason
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.preorderId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.preorderId} then preorder.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.preorderId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.preorderId} then preorder.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="isDeleted =case preorderId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.isDeleted != null ">
+            when  #{item.preorderId} then #{item.isDeleted}
+          </if>
+          <if test="item.isDeleted == null ">
+            when  #{item.preorderId} then preorder.is_deleted
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where preorder_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.preorderId} 
+    </foreach>
+  </update>
+</mapper>

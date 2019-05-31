@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.pet.dao.ReceiverAddressMapper">
+  <resultMap id="BaseResultMap" type="com.lin.pet.entity.ReceiverAddress">
+    <constructor>
+      <idArg column="receiver_address_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="order_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="province" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="city" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="county" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="detail" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modified_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="recevier_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    receiver_address_id, order_id, province, city, county, detail, create_time, modified_time, 
+    phone, recevier_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from receiver_address
+    where receiver_address_id = #{receiverAddressId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from receiver_address
+    where receiver_address_id = #{receiverAddressId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lin.pet.entity.ReceiverAddress">
+    insert into receiver_address (receiver_address_id, order_id, province, 
+      city, county, detail, 
+      create_time, modified_time, phone, 
+      recevier_name)
+    values (#{receiverAddressId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{phone,jdbcType=CHAR}, 
+      #{recevierName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lin.pet.entity.ReceiverAddress">
+    insert into receiver_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receiverAddressId != null">
+        receiver_address_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="recevierName != null">
+        recevier_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receiverAddressId != null">
+        #{receiverAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="recevierName != null">
+        #{recevierName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into receiver_address (receiver_address_id, order_id, province, 
+      city, county, detail, 
+      create_time, modified_time, 
+      phone, recevier_name)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.receiverAddressId,jdbcType=BIGINT}, #{item.orderId,jdbcType=BIGINT}, #{item.province,jdbcType=VARCHAR}, 
+        #{item.city,jdbcType=VARCHAR}, #{item.county,jdbcType=VARCHAR}, #{item.detail,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifiedTime,jdbcType=TIMESTAMP}, 
+        #{item.phone,jdbcType=CHAR}, #{item.recevierName,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into receiver_address
+    (receiver_address_id, order_id, province, city, county, detail, create_time, modified_time, 
+      phone, recevier_name)
+    values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.receiverAddressId != null">
+          #{item.receiverAddressId,jdbcType=BIGINT},
+        </if>
+        <if test="item.receiverAddressId == null">
+          NULL,
+        </if>
+        <if test="item.orderId != null">
+          #{item.orderId,jdbcType=BIGINT},
+        </if>
+        <if test="item.orderId == null">
+          NULL,
+        </if>
+        <if test="item.province != null">
+          #{item.province,jdbcType=VARCHAR},
+        </if>
+        <if test="item.province == null">
+          NULL,
+        </if>
+        <if test="item.city != null">
+          #{item.city,jdbcType=VARCHAR},
+        </if>
+        <if test="item.city == null">
+          NULL,
+        </if>
+        <if test="item.county != null">
+          #{item.county,jdbcType=VARCHAR},
+        </if>
+        <if test="item.county == null">
+          NULL,
+        </if>
+        <if test="item.detail != null">
+          #{item.detail,jdbcType=VARCHAR},
+        </if>
+        <if test="item.detail == null">
+          NULL,
+        </if>
+        <if test="item.createTime != null">
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime == null">
+          NULL,
+        </if>
+        <if test="item.modifiedTime != null">
+          #{item.modifiedTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modifiedTime == null">
+          NULL,
+        </if>
+        <if test="item.phone != null">
+          #{item.phone,jdbcType=CHAR},
+        </if>
+        <if test="item.phone == null">
+          NULL,
+        </if>
+        <if test="item.recevierName != null">
+          #{item.recevierName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.recevierName == null">
+          NULL,
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lin.pet.entity.ReceiverAddress">
+    update receiver_address
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="recevierName != null">
+        recevier_name = #{recevierName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where receiver_address_id = #{receiverAddressId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lin.pet.entity.ReceiverAddress">
+    update receiver_address
+    set order_id = #{orderId,jdbcType=BIGINT},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      phone = #{phone,jdbcType=CHAR},
+      recevier_name = #{recevierName,jdbcType=VARCHAR}
+    where receiver_address_id = #{receiverAddressId,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    update receiver_address
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="orderId =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.orderId}
+        </foreach>
+      </trim>
+      <trim prefix="province =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.province}
+        </foreach>
+      </trim>
+      <trim prefix="city =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.city}
+        </foreach>
+      </trim>
+      <trim prefix="county =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.county}
+        </foreach>
+      </trim>
+      <trim prefix="detail =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.detail}
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.modifiedTime}
+        </foreach>
+      </trim>
+      <trim prefix="phone =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.phone}
+        </foreach>
+      </trim>
+      <trim prefix="recevierName =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          when  #{item.receiverAddressId} then #{item.recevierName}
+        </foreach>
+      </trim>
+    </trim>
+    where receiver_address_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.receiverAddressId} 
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    update receiver_address
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="orderId =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.orderId != null ">
+            when  #{item.receiverAddressId} then #{item.orderId}
+          </if>
+          <if test="item.orderId == null ">
+            when  #{item.receiverAddressId} then receiver_address.order_id
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="province =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.province != null ">
+            when  #{item.receiverAddressId} then #{item.province}
+          </if>
+          <if test="item.province == null ">
+            when  #{item.receiverAddressId} then receiver_address.province
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="city =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.city != null ">
+            when  #{item.receiverAddressId} then #{item.city}
+          </if>
+          <if test="item.city == null ">
+            when  #{item.receiverAddressId} then receiver_address.city
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="county =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.county != null ">
+            when  #{item.receiverAddressId} then #{item.county}
+          </if>
+          <if test="item.county == null ">
+            when  #{item.receiverAddressId} then receiver_address.county
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="detail =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.detail != null ">
+            when  #{item.receiverAddressId} then #{item.detail}
+          </if>
+          <if test="item.detail == null ">
+            when  #{item.receiverAddressId} then receiver_address.detail
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="createTime =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.createTime != null ">
+            when  #{item.receiverAddressId} then #{item.createTime}
+          </if>
+          <if test="item.createTime == null ">
+            when  #{item.receiverAddressId} then receiver_address.create_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="modifiedTime =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.modifiedTime != null ">
+            when  #{item.receiverAddressId} then #{item.modifiedTime}
+          </if>
+          <if test="item.modifiedTime == null ">
+            when  #{item.receiverAddressId} then receiver_address.modified_time
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="phone =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.phone != null ">
+            when  #{item.receiverAddressId} then #{item.phone}
+          </if>
+          <if test="item.phone == null ">
+            when  #{item.receiverAddressId} then receiver_address.phone
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="recevierName =case receiverAddressId" suffix="end,">
+        <foreach collection="list" index="index" item="item" separator=" ">
+          <if test="item.recevierName != null ">
+            when  #{item.receiverAddressId} then #{item.recevierName}
+          </if>
+          <if test="item.recevierName == null ">
+            when  #{item.receiverAddressId} then receiver_address.recevier_name
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where receiver_address_id in 
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+       #{item.receiverAddressId} 
+    </foreach>
+  </update>
+</mapper>
